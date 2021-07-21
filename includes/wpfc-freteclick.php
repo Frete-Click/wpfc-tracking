@@ -9,14 +9,6 @@ class FreteClick{
      */
     public static function get_track($data = []){
 
-        if(empty($data['orderId'])){
-            return '<spam id="invalid-data">Por favor informe o numero do pedido!</spam>';
-        }
-
-        if(empty($data['document'])){
-            return '<spam id="invalid-data">Por favor informe o CPF ou CNPJ!</spam>';
-        }
-
         $url_api = "https://api.freteclick.com.br/track/back/" . $data['orderId'] . "/" . $data['document'];
     
         $headers = array(         
@@ -41,7 +33,7 @@ class FreteClick{
         curl_close($ch); 
 
         if($result['response']['success'] === false){
-            return '<spam id="invalid-data">Pedido invalido (Por favor tente novamente)</spam>';
+            return null;
         }
 
         return $result;
