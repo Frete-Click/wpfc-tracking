@@ -44,39 +44,82 @@ function wpfc_tracking(){
 
 
         if(empty($_POST['orderId'])){            
-            return '<spam id="invalid-data">Por favor informe o numeo do Pedido!</spam>';
+            $error =  '<spam id="invalid-data">Por favor informe o numeo do Pedido!</spam>';        
         }
 
-        if(empty($_POST['document'])){
-            return '<spam id="invalid-data">Por favor informe o CNPJ ou CPF!</spam>';
-        }
-
-        $data = array(
-            'orderId'   => preg_replace("/[^0-9]/","", $_POST['orderId']),
-            'document'  => preg_replace("/[^0-9]/","", $_POST['document'])
-        );
-
-        $result =  FreteClick::get_track($data);
-
-        if($result != null){
-            foreach($result['response']['data']['order'] as $key => $order_data) {
-                $order[$key] = $order_data;
-            }
-        }
-
-        foreach($result['response']['data']['tracking'] as $tracking_data) {
-            $tracking = array_reverse($tracking_data);
+        if(!empty($_POST['orderId']) && empty($_POST['document'])){
+            $error = '<spam id="invalid-data">Por favor informe o CNPJ ou CPF!</spam>';
         }
 
         do_action('wpfc-before-track-result');
 
-        do_action('wpfc-content-track-result', $order, $tracking);
+        echo "<div id='track-error-box'>{$error}</div>";
+
+        if(empty($error)){
+
+            $data = array(
+                'orderId'   => preg_replace("/[^0-9]/","", $_POST['orderId']),
+                'document'  => preg_replace("/[^0-9]/","", $_POST['document'])
+            );
+
+            $result =  FreteClick::get_track($data);
+
+            if($result != null){
+                foreach($result['response']['data']['order'] as $key => $order_data) {
+                    $order[$key] = $order_data;
+                }
+            }
+
+            foreach($result['response']['data']['tracking'] as $tracking_data) {
+                $tracking = array_reverse($tracking_data);
+            }
+
+            switch($order['orderStatus']['status']){
+                case 'quote': $order['orderStatus']['status'] = "Cotação";
+                break;
+                case 'waiting client invoice tax': $order['orderStatus']['status'] = "Aguardando nota fiscal";
+                break;
+                case 'automatic analysis': $order['orderStatus']['status'] = "Análise automática";
+                break;
+                case 'analysis': $order['orderStatus']['status'] = "Em análise";
+                break;
+                case 'waiting payment': $order['orderStatus']['status'] = "Aguardando pagamento";
+                break;
+                case 'waiting retrieve': $order['orderStatus']['status'] = "Aguardando coleta";
+                break;
+                case 'on the way': $order['orderStatus']['status'] = "Em trânsito";
+                break;
+                case 'waiting invoice tax': $order['orderStatus']['status'] = "Aguardando fatura";
+                break;
+                case 'delivered': $order['orderStatus']['status'] = "Entregue";
+                break;
+                case 'waiting billing': $order['orderStatus']['status'] = "Gerando NF";
+                break;
+                case 'canceled': $order['orderStatus']['status'] = "Cancelado";
+                break;
+                case 'waiting commission': $order['orderStatus']['status'] = "Aguardando comissão";
+                break;
+                case 'ship to carrier': $order['orderStatus']['status'] = "Entregar na transportadora";
+                break;
+                case 'retrieved': $order['orderStatus']['status'] = "Coletado";
+                break;
+            }
+
+            do_action('wpfc-content-track-result', $order, $tracking);
+
+            
+        }
 
         do_action('wpfc-after-track-result');
+
 
     }
 
     return ob_get_clean();
+}
+
+function wpfc_load_textdomain() {
+    load_plugin_textdomain( 'wpfc_tracking', false, dirname( plugin_basename( __FILE__ ) ) . '/languages' );
 }
 
 function wpfc_enqueue_scripts(){

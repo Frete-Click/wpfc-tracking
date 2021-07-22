@@ -14,7 +14,7 @@
 <div class="dms-col-md-3 dms-col-lg-3 dms-col-xl-3 dms-col-sm-3 dms-col-xs-6 dms-col-6">
     <div class="wrap-track-box">
         <h2>Status</h2>
-        <span><?php echo $order['orderStatus']['status']; ?></span>
+        <span><?php printf( __('%s', 'wpfc_tracking'), $order['orderStatus']['status']); ?></span>
     </div>
 </div>
 <div class="dms-col-md-3 dms-col-lg-3 dms-col-xl-3 dms-col-sm-3 dms-col-xs-6 dms-col-6">

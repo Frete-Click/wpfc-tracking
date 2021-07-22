@@ -6,21 +6,22 @@
     background-color: #ffffff;
     border-color: #ffffff;
     width: 100%;
-    padding: 12px !important;
+    padding: 15px !important;
     border-radius: 8px !important;
 }
 
 #wpfc-btnrastrear{
     background-color: #faae31;
-    border: 3px solid #faae31;
+    border: 1px solid #faae31;
     color: #000000;
     font-size: 15px;
-    padding: 15px !important;
 }
+
 #wpfc-btnrastrear:hover{
     background-color: #e29820;
-    border: 3px solid #e29820;
+    border: 1px solid #e29820;
 }
+
 #invalid-data{
     color: #000000;
     padding: 15px;
@@ -32,7 +33,10 @@
     padding: 15px !important;
 }
 
-
+#track-error-box{
+    padding: 10px;
+    width: 100%;
+}
 
 
 .wrap-track-box{

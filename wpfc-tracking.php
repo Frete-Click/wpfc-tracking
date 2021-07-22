@@ -2,13 +2,13 @@
 /**
  * Plugin Name:			WP Tracking - Via Frete Click
  * Description:			Rastreamento de mercadoreias via Frete Click. Shortcode: [wpfc-track]
- * Version:				1.0.2
+ * Version:				1.0.3
  * Author:				Frete Click
  * Author URI:			https://www.freteclick.com.br/
  * Requires at least:	5.3
  * Tested up to:		5.7.2
  *
- * Text Domain: wpfc-tracking
+ * Text Domain: wpfc_tracking
  * Domain Path: /languages
  *
  */
