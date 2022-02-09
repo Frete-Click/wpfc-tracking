@@ -67,32 +67,41 @@ function showTrackBack(){
                         break;
                     }
     
+                    /**
+                     * Alter Date
+                     */
                     var alterDate = val.data.order.alterDate.date;
     
                     alterDate = new Date(alterDate);
-                    alterDate = alterDate.toLocaleDateString('pt-BR', {timeZone: 'UTC'});
+                    alterDate = alterDate.toLocaleDateString('pt-BR', {timeZone: 'UTC'});                    
+          
+                    /**
+                     * Delivery Due Date
+                     */
+                    var deliveryDueDateExtra = val.data.order.deliveryDueDate;
+                    
+                    deliveryDueDateExtra = new Date(deliveryDueDateExtra);
+                    deliveryDueDateExtra = deliveryDueDateExtra.toLocaleDateString('pt-BR', {timeZone: 'UTC'});
+                    
+                    Date.prototype.addDays = function(days) {
+                        var date = new Date(this.valueOf());
+                        date.setDate(date.getDate() + days);
+                        return date;
+                    }
 
-                    var deliveryDueDate = val.data.order.deliveryDueDate;
+                    var deliveryDueDateExtra = new Date(deliveryDueDateExtra);
+                    var deliveryDueDateExtra =  deliveryDueDateExtra.addDays(5);
 
+                    var deliveryDueDateExtra =  deliveryDueDateExtra.toLocaleDateString('pt-BR', {timeZone: 'UTC'});
 
-                    const deliveryDueDateSplit = deliveryDueDate.split('/');
-
-                    const day = deliveryDueDateSplit[0]; 
-                    const month = deliveryDueDateSplit[1]; 
-                    const year = deliveryDueDateSplit[2]; 
-
-                    deliveryDueDate = new Date(day,month, year);
-                    deliveryDueDate =  deliveryDueDate.toLocaleDateString('pt-BR', {timeZone: 'UTC'});
-
-
-    
+                    /**
+                     * Show HTML
+                     */                                        
                     id1.innerHTML = "#" + val.data.order.id;
                     id2.innerHTML = alterDate;
                     id3.innerHTML = val.data.order.orderStatus.status;
-                    id4.innerHTML = deliveryDueDate;
+                    id4.innerHTML = val.data.order.deliveryDueDate + " - " + deliveryDueDateExtra;
 
-                    console.log(val.data.order.deliveryDueDate);
-             
                 });
 
                 jQuery('.track-wraper').css('display', 'block');
