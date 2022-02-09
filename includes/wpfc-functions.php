@@ -10,112 +10,12 @@ function wpfc_content_form_track(){
     return $html;
 }
 
-function wpfc_before_track_result(){
-    $pluginDir =  plugin_dir_path(__FILE__);
-        
-    $html = include $pluginDir . '../views/templates/result/track-before.php';
-
-    return $html;
-}
-
-function wpfc_after_track_result(){
-    $pluginDir =  plugin_dir_path(__FILE__);
-        
-    $html = include $pluginDir . '../views/templates/result/track-after.php';
-
-    return $html;
-}
-
-function wpfc_content_track_result($order, $tracking){
+function wpfc_content_track_result(){
     $pluginDir =  plugin_dir_path(__FILE__);
         
     $html = include $pluginDir . '../views/templates/result/track-result.php';
 
     return $html;
-}
-
-function wpfc_tracking(){
-
-    ob_start();
-
-    do_action('wpfc-content-form-track');
-
-    if(isset($_POST['submit'])){
-
-
-        if(empty($_POST['orderId'])){            
-            $error =  '<spam id="invalid-data">Por favor informe o numeo do Pedido!</spam>';        
-        }
-
-        if(!empty($_POST['orderId']) && empty($_POST['document'])){
-            $error = '<spam id="invalid-data">Por favor informe o CNPJ ou CPF!</spam>';
-        }
-
-        do_action('wpfc-before-track-result');
-
-        echo "<div id='track-error-box'>{$error}</div>";
-
-        if(empty($error)){
-
-            $data = array(
-                'orderId'   => preg_replace("/[^0-9]/","", $_POST['orderId']),
-                'document'  => preg_replace("/[^0-9]/","", $_POST['document'])
-            );
-
-            $result =  FreteClick::get_track($data);
-
-            if($result != null){
-                foreach($result['response']['data']['order'] as $key => $order_data) {
-                    $order[$key] = $order_data;
-                }
-            }
-
-            foreach($result['response']['data']['tracking'] as $tracking_data) {
-                $tracking = array_reverse($tracking_data);
-            }
-
-            switch($order['orderStatus']['status']){
-                case 'quote': $order['orderStatus']['status'] = "Cotação";
-                break;
-                case 'waiting client invoice tax': $order['orderStatus']['status'] = "Aguardando nota fiscal";
-                break;
-                case 'automatic analysis': $order['orderStatus']['status'] = "Análise automática";
-                break;
-                case 'analysis': $order['orderStatus']['status'] = "Em análise";
-                break;
-                case 'waiting payment': $order['orderStatus']['status'] = "Aguardando pagamento";
-                break;
-                case 'waiting retrieve': $order['orderStatus']['status'] = "Aguardando coleta";
-                break;
-                case 'on the way': $order['orderStatus']['status'] = "Em trânsito";
-                break;
-                case 'waiting invoice tax': $order['orderStatus']['status'] = "Aguardando fatura";
-                break;
-                case 'delivered': $order['orderStatus']['status'] = "Entregue";
-                break;
-                case 'waiting billing': $order['orderStatus']['status'] = "Gerando NF";
-                break;
-                case 'canceled': $order['orderStatus']['status'] = "Cancelado";
-                break;
-                case 'waiting commission': $order['orderStatus']['status'] = "Aguardando comissão";
-                break;
-                case 'ship to carrier': $order['orderStatus']['status'] = "Entregar na transportadora";
-                break;
-                case 'retrieved': $order['orderStatus']['status'] = "Coletado";
-                break;
-            }
-
-            do_action('wpfc-content-track-result', $order, $tracking);
-
-            
-        }
-
-        do_action('wpfc-after-track-result');
-
-
-    }
-
-    return ob_get_clean();
 }
 
 function wpfc_load_textdomain() {
@@ -128,4 +28,45 @@ function wpfc_enqueue_scripts(){
 
     wp_enqueue_style('wsvp-media-query', $plugin_uri . 'views/assets/css/dms-media-query.min.css');
     wp_enqueue_style('wpfc-style', $plugin_uri . 'views/assets/css/wpfc-style.css');
+
+
+    wp_enqueue_script('wpfc-js-mask', 'https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.15/jquery.mask.min.js', array('jquery'), '1.0.0', true);
+    wp_enqueue_script('wpfc-mask', $plugin_uri . 'views/assets/js/wpfc-mask.js', array('jquery'), '1.0.2', true); 
+    wp_enqueue_script('wpfc-tracking', $plugin_uri . 'views/assets/js/wpfc-tracking.js', array('jquery'), null, true);
+
+    wp_localize_script('wpfc-tracking', 'ajax_object', array(
+        'url' => admin_url("admin-ajax.php")
+    ));
+
 }
+
+function wpfc_createAjaxShortcode()
+{
+    ob_start();
+    
+    do_action('wpfc-content-form-track');
+
+    do_action('wpfc-before-track-result');
+    do_action('wpfc-content-track-result');
+    do_action('wpfc-after-track-result');
+
+    return ob_get_clean();
+}
+
+
+function wpfcTracking(){
+
+    $data = array(
+        'orderId'   => preg_replace("/[^0-9]/","", $_POST['orderId']),
+        'document'  => preg_replace("/[^0-9]/","", $_POST['document'])
+    );
+
+    $res = FreteClick::get_track($data);
+
+    echo json_encode($res);
+
+    wp_die();
+}
+
+add_action('wp_ajax_wpfcTracking', 'wpfcTracking');
+add_action('wp_ajax_nopriv_wpfcTracking', 'wpfcTracking');

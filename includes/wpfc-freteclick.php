@@ -31,7 +31,7 @@ class FreteClick{
         }
 
         curl_close($ch); 
-
+        
         if($result['response']['success'] === false){
             return null;
         }
