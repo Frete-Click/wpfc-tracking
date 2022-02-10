@@ -90,7 +90,7 @@ function showTrackBack(){
                     }
 
                     var deliveryDueDateExtra = new Date(deliveryDueDateExtra);
-                    var deliveryDueDateExtra =  deliveryDueDateExtra.addDays(4);
+                    var deliveryDueDateExtra =  deliveryDueDateExtra.addDays(3);
 
                     var deliveryDueDateExtra =  deliveryDueDateExtra.toLocaleDateString('pt-BR', {timeZone: 'UTC'});
 
