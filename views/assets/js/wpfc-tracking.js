@@ -100,7 +100,7 @@ function showTrackBack(){
                     id1.innerHTML = "#" + val.data.order.id;
                     id2.innerHTML = alterDate;
                     id3.innerHTML = val.data.order.orderStatus.status;
-                    id4.innerHTML = val.data.order.deliveryDueDate + " - " + deliveryDueDateExtra;
+                    id4.innerHTML = val.data.order.deliveryDueDate + " a " + deliveryDueDateExtra;
 
                 });
 
