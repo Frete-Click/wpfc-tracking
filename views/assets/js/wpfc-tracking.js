@@ -47,7 +47,7 @@ function showTrackBack(){
                         break;
                         case 'waiting retrieve': val.data.order.orderStatus.status = "Aguardando coleta";
                         break;
-                        case 'on the way': val.data.order.orderStatus.status = "Em trânsito";
+                        case 'on the way': val.data.order.orderStatus.status = "Em viagem";
                         break;
                         case 'waiting invoice tax': val.data.order.orderStatus.status = "Aguardando fatura";
                         break;
@@ -76,22 +76,28 @@ function showTrackBack(){
                     alterDate = alterDate.toLocaleDateString('pt-BR', {timeZone: 'UTC'});                    
           
                     /**
-                     * Delivery Due Date
+                     * Delivery Due Date Extra
                      */
                     var deliveryDueDateExtra = val.data.order.deliveryDueDate;
+
+                    /**
+                     * Convert Short Date to Long Date
+                     */
+                    var parts = deliveryDueDateExtra.split("/"),
+                    date = new Date(+parts[2], parts[1]-1, +parts[0]);
                     
-                    deliveryDueDateExtra = new Date(deliveryDueDateExtra);
-                    deliveryDueDateExtra = deliveryDueDateExtra.toLocaleDateString('pt-BR', {timeZone: 'UTC'});
-                    
+                    deliveryDueDateExtra = new Date(date.toString());
+                 
+                    /**
+                     * Add Extra days
+                     */
                     Date.prototype.addDays = function(days) {
                         var date = new Date(this.valueOf());
                         date.setDate(date.getDate() + days);
                         return date;
                     }
-
-                    var deliveryDueDateExtra = new Date(deliveryDueDateExtra);
+                    
                     var deliveryDueDateExtra =  deliveryDueDateExtra.addDays(3);
-
                     var deliveryDueDateExtra =  deliveryDueDateExtra.toLocaleDateString('pt-BR', {timeZone: 'UTC'});
 
                     /**
