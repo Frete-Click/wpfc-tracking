@@ -14,7 +14,6 @@ class FreteClick{
         $headers = array(         
           'Accept:application/ld+json',
           'Content-Type:application/json',
-          'api-token: 242c5d6f05fd292bc91fd67170dc5a04'
         );
     
         $ch = curl_init();

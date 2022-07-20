@@ -2,7 +2,7 @@
 /**
  * Plugin Name:			Frete Click - Tracking
  * Description:			Consulte a situação da entrega de um ou mais objetos. Shortcode: [wpfc-track]
- * Version:				1.0.13
+ * Version:				1.0.14
  * Author:				Frete Click
  * Author URI:			https://www.freteclick.com.br/
  * Requires at least:	5.0

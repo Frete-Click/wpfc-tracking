@@ -34,36 +34,38 @@ function showTrackBack(){
 
                 Object.values(response).forEach(val => {
 
-                    switch(val.data.order.orderStatus.status){
-                        case 'quote': val.data.order.orderStatus.status = "Cotação";
+                    console.log(response)
+
+                    switch(val.data.order.status.status){
+                        case 'quote': val.data.order.status.status = "Cotação";
                         break;
-                        case 'waiting client invoice tax': val.data.order.orderStatus.status = "Aguardando nota fiscal";
+                        case 'waiting client invoice tax': val.data.order.status.status = "Aguardando nota fiscal";
                         break;
-                        case 'automatic analysis': val.data.order.orderStatus.status = "Análise automática";
+                        case 'automatic analysis': val.data.order.status.status = "Análise automática";
                         break;
-                        case 'analysis': val.data.order.orderStatus.status = "Em análise";
+                        case 'analysis': val.data.order.status.status = "Em análise";
                         break;
-                        case 'waiting payment': val.data.order.orderStatus.status = "Aguardando pagamento";
+                        case 'waiting payment': val.data.order.status.status = "Aguardando pagamento";
                         break;
-                        case 'waiting retrieve': val.data.order.orderStatus.status = "Aguardando coleta";
+                        case 'waiting retrieve': val.data.order.status.status = "Aguardando coleta";
                         break;
-                        case 'on the way': val.data.order.orderStatus.status = "Em viagem";
+                        case 'on the way': val.data.order.status.status = "Em viagem";
                         break;
-                        case 'waiting invoice tax': val.data.order.orderStatus.status = "Aguardando fatura";
+                        case 'waiting invoice tax': val.data.order.status.status = "Aguardando fatura";
                         break;
-                        case 'delivered': val.data.order.orderStatus.status = "Entregue";
+                        case 'delivered': val.data.order.status.status = "Entregue";
                         break;
-                        case 'waiting billing': val.data.order.orderStatus.status = "Gerando NF";
+                        case 'waiting billing': val.data.order.status.status = "Gerando NF";
                         break;
-                        case 'canceled': val.data.order.orderStatus.status = "Cancelado";
+                        case 'canceled': val.data.order.status.status = "Cancelado";
                         break;
-                        case 'waiting commission': val.data.order.orderStatus.status = "Aguardando comissão";
+                        case 'waiting commission': val.data.order.status.status = "Aguardando comissão";
                         break;
-                        case 'ship to carrier': val.data.order.orderStatus.status = "Entregar na transportadora";
+                        case 'ship to carrier': val.data.order.status.status = "Entregar na transportadora";
                         break;
-                        case 'retrieved': val.data.order.orderStatus.status = "Coletado";
+                        case 'retrieved': val.data.order.status.status = "Coletado";
                         break;
-                        case 'expired': val.data.order.orderStatus.status = "Expirado";
+                        case 'expired': val.data.order.status.status = "Expirado";
                         break;
                     }
     
@@ -105,7 +107,7 @@ function showTrackBack(){
                      */                                        
                     id1.innerHTML = "#" + val.data.order.id;
                     id2.innerHTML = alterDate;
-                    id3.innerHTML = val.data.order.orderStatus.status;
+                    id3.innerHTML = val.data.order.status.status;
                     id4.innerHTML = val.data.order.deliveryDueDate + " a " + deliveryDueDateExtra;
 
                 });
